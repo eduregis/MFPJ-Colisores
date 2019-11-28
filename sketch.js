@@ -2,7 +2,7 @@ let pontos = [];
 let AABB, mouseAABB, sphere, mouseSphere, OBB;
 // variáveis que recebem o tipo de volume que será criado a partir de pontos e do mouse.
 let pointsMode = 'AABB';
-let mouseMode = 'AABB';
+let mouseMode = 'OBB';
 function setup(){
   createCanvas(720,720);
   // variáveis que guardam os valores dos volumes envoltórios de pontos
@@ -172,7 +172,46 @@ function drawAABB(){
         } 
         break;
       case 'OBB':
+        // variável de controle
+        let isCollide2 = false;
+        // testa se pelo menos um dos 4 vértices da OBB está dentro da AABB
+        let axis = {
+          x: mouseX + (mouseOBB.h/2)*Math.cos(PI/4) - (mouseOBB.w/2)*Math.cos(PI/4),
+          y: mouseY - (mouseOBB.h/2)*Math.cos(PI/4) - (mouseOBB.w/2)*Math.cos(PI/4)
+        }
+        if((axis.x > AABB.x - AABB.w/2) && (axis.x < AABB.x + AABB.w/2) && (axis.y > AABB.y - AABB.h/2) && (axis.y < AABB.y + AABB.h/2))
+          isCollide2 = true;
+        axis = {
+          x: mouseX - (mouseOBB.h/2)*Math.cos(PI/4) - (mouseOBB.w/2)*Math.cos(PI/4),
+          y: mouseY + (mouseOBB.h/2)*Math.cos(PI/4) - (mouseOBB.w/2)*Math.cos(PI/4)
+        }
+        if((axis.x > AABB.x - AABB.w/2) && (axis.x < AABB.x + AABB.w/2) && (axis.y > AABB.y - AABB.h/2) && (axis.y < AABB.y + AABB.h/2))
+          isCollide2 = true;
+        axis = {
+          x: mouseX - (mouseOBB.h/2)*Math.cos(PI/4) + (mouseOBB.w/2)*Math.cos(PI/4),
+          y: mouseY + (mouseOBB.h/2)*Math.cos(PI/4) + (mouseOBB.w/2)*Math.cos(PI/4)
+        }
+        if((axis.x > AABB.x - AABB.w/2) && (axis.x < AABB.x + AABB.w/2) && (axis.y > AABB.y - AABB.h/2) && (axis.y < AABB.y + AABB.h/2))
+          isCollide2 = true;
+        axis = {
+          x: mouseX + (mouseOBB.h/2)*Math.cos(PI/4) + (mouseOBB.w/2)*Math.cos(PI/4),
+          y: mouseY - (mouseOBB.h/2)*Math.cos(PI/4) + (mouseOBB.w/2)*Math.cos(PI/4)
+        }
+        if((axis.x > AABB.x - AABB.w/2) && (axis.x < AABB.x + AABB.w/2) && (axis.y > AABB.y - AABB.h/2) && (axis.y < AABB.y + AABB.h/2))
+          isCollide2 = true;
+        // criamos dois vetores para receber os valores dos centros
+        let mouseOBBVector = createVector(mouseX, mouseY);
+        let AABBVector = createVector(AABB.x, AABB.y);
+        // giramos os vetores para deixarmos o AABB como uma OBB e o OBB como uma AABB
+        AABBVector.rotate(-PI/4);
+        mouseOBBVector.rotate(-PI/4);
+        // testa se pelo menos um dos 4 vértices da AABB está dentro da OBB
         
+        if(isCollide2){ // pinta o interior do AABB caso esteja detectando contato
+          fill(200,100,100);
+        } else {
+          fill(255);
+        } 
         break;
     }
     strokeWeight(1);  
