@@ -5,7 +5,7 @@ let pointsMode = 'AABB';
 let mouseMode = 'AABB';
 function setup(){
   createCanvas(720,720);
-  // variáveis que guardam os valores dos volumes
+  // variáveis que guardam os valores dos volumes envoltórios de pontos
   AABB = {
     x: 0,
     y: 0,
@@ -23,6 +23,7 @@ function setup(){
     w: 0,
     h: 0
   }
+  // variáveis que guardam os valores dos volumes que seguem o mouse
   mouseAABB = {
     w: 100,
     h: 100
@@ -38,6 +39,7 @@ function setup(){
 
 function draw(){
   background(200);
+  // desenha o volume que segue o mouse
   switch(mouseMode){
     case 'AABB':
       drawMouseAABB();
@@ -49,6 +51,7 @@ function draw(){
       drawMouseOBB();
       break;
   }
+  // desenha o volume envoltório de pontos, e colore seu inteiror caso esteja colidindo com o volume que segue o mouse
   switch(pointsMode){
     case 'AABB':
       drawAABB();
@@ -60,7 +63,9 @@ function draw(){
       drawOBB();
       break;
   }
+  // desenha os pontos dentro do volume
   drawPoints();  
+  // desenha a hud
   drawHud();
 };
 
@@ -325,9 +330,9 @@ function drawOBB() {
     let minX = 1000, minY = 1000, maxX = -1000, maxY = -1000;
     pontos.forEach(element => {
       // calcula a projeção desse ponto no vetor que representa o eixo X da OBB
-      let prodEscalarX = prodEscalar(element.x, element.y,0.7071, 0.7071);
+      let prodEscalarX = prodEscalar(element.x, element.y,1, 1);
       // calcula a projeção desse ponto no vetor que representa o eixo Y da OBB
-      let prodEscalarY = prodEscalar(element.x, element.y,-0.7071, 0.7071);  
+      let prodEscalarY = prodEscalar(element.x, element.y,-1, 1);  
       // testa se os pontos novos possuem valores que excedem os limites estabelecidos, e os define como novos limites             
       if (prodEscalarX < minX){
         minX = prodEscalarX;
@@ -412,7 +417,7 @@ function drawOBB() {
     }
     strokeWeight(1);
     stroke('green');
-    // desenha a OBB, com um quadrilátero informal
+    // desenha a OBB, definindo cada vértice
     quad(OBB.x + (OBB.h/2)*Math.cos(PI/4) - (OBB.w/2)*Math.cos(PI/4),
          OBB.y - (OBB.h/2)*Math.cos(PI/4) - (OBB.w/2)*Math.cos(PI/4),
          OBB.x - (OBB.h/2)*Math.cos(PI/4) - (OBB.w/2)*Math.cos(PI/4),
@@ -429,6 +434,7 @@ function drawMouseAABB(){
   stroke('black');
   fill(255);
   strokeWeight(1);
+  // desenha o retângulo em volta do mouse
   rect(mouseX,mouseY,mouseAABB.w, mouseAABB.h);
 };
 
@@ -437,6 +443,7 @@ function drawMouseSphere(){
   stroke('black');
   fill(255);
   strokeWeight(1);
+  // desenha a esfera em volta do mouse
   ellipse(mouseX,mouseY,mouseSphere.r);
 }
 
@@ -444,6 +451,7 @@ function drawMouseOBB(){
   stroke('black');
   fill(255);
   strokeWeight(1);
+  // desenha a OBB em volta do mouse, definindo cada vértice
   quad(mouseX + (mouseOBB.h/2)*Math.cos(PI/4) - (mouseOBB.w/2)*Math.cos(PI/4),
        mouseY - (mouseOBB.h/2)*Math.cos(PI/4) - (mouseOBB.w/2)*Math.cos(PI/4),
        mouseX - (mouseOBB.h/2)*Math.cos(PI/4) - (mouseOBB.w/2)*Math.cos(PI/4),
@@ -455,6 +463,7 @@ function drawMouseOBB(){
 }
 
 function drawHud(){
+  // desenha a hud da aplicação
   stroke(0);
   fill(0);
   strokeWeight(1);
@@ -465,6 +474,7 @@ function drawHud(){
 
 function keyReleased(){
   if(keyCode == 71){
+    // troca o tipo de volume envoltório de pontos
     switch(pointsMode){
       case "AABB":
         pointsMode = "Sphere";
@@ -477,6 +487,7 @@ function keyReleased(){
         break;
     }
   } else if (keyCode == 77){
+    // troca o tipo de volume em volta do mouse
     switch(mouseMode){
       case "AABB":
         mouseMode = "Sphere";
@@ -491,6 +502,12 @@ function keyReleased(){
   }
 };
 
+// função que calcula o produto escalar de dois vetores, o primeiro representando um ponto, e o segundo, um vetor que se deseja projetar o ponto
 function prodEscalar(vecAX, vecAY, vecBX, vecBY){
+  // tiramos a norma do vetor
+  let norm = Math.sqrt(vecBX*vecBX + vecBY);
+  // normalizamos o vetor
+  vecBX = vecBX/norm;
+  vecBY = vecBY/norm;
   return (vecAX * vecBX) + (vecAY * vecBY);
 }
