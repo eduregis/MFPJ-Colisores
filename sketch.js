@@ -360,38 +360,101 @@ function drawOBB() {
     //colisões
     switch(mouseMode){
       case 'AABB':
-
+        // variável de controle
+        let isCollide = false;
+        // testa se pelo menos um dos 4 vértices da OBB está dentro da AABB
+        let axis = {
+          x: OBB.x + (OBB.h/2)*Math.cos(PI/4) - (OBB.w/2)*Math.cos(PI/4),
+          y: OBB.y - (OBB.h/2)*Math.cos(PI/4) - (OBB.w/2)*Math.cos(PI/4)
+        }
+        if((axis.x > mouseX - mouseAABB.w/2) && (axis.x < mouseX + mouseAABB.w/2) && (axis.y > mouseY - mouseAABB.h/2) && (axis.y < mouseY + mouseAABB.h/2))
+          isCollide = true;
+        axis = {
+          x: OBB.x - (OBB.h/2)*Math.cos(PI/4) - (OBB.w/2)*Math.cos(PI/4),
+          y: OBB.y + (OBB.h/2)*Math.cos(PI/4) - (OBB.w/2)*Math.cos(PI/4)
+        }
+        if((axis.x > mouseX - mouseAABB.w/2) && (axis.x < mouseX + mouseAABB.w/2) && (axis.y > mouseY - mouseAABB.h/2) && (axis.y < mouseY + mouseAABB.h/2))
+          isCollide = true;
+        axis = {
+          x: OBB.x - (OBB.h/2)*Math.cos(PI/4) + (OBB.w/2)*Math.cos(PI/4),
+          y: OBB.y + (OBB.h/2)*Math.cos(PI/4) + (OBB.w/2)*Math.cos(PI/4)
+        }
+        if((axis.x > mouseX - mouseAABB.w/2) && (axis.x < mouseX + mouseAABB.w/2) && (axis.y > mouseY - mouseAABB.h/2) && (axis.y < mouseY + mouseAABB.h/2))
+          isCollide = true;
+        axis = {
+          x: OBB.x + (OBB.h/2)*Math.cos(PI/4) + (OBB.w/2)*Math.cos(PI/4),
+          y: OBB.y - (OBB.h/2)*Math.cos(PI/4) + (OBB.w/2)*Math.cos(PI/4)
+        }
+        if((axis.x > mouseX - mouseAABB.w/2) && (axis.x < mouseX + mouseAABB.w/2) && (axis.y > mouseY - mouseAABB.h/2) && (axis.y < mouseY + mouseAABB.h/2))
+          isCollide = true;
+        // criamos dois vetores para receber os valores dos centros
+        let mouseAABBVector = createVector(mouseX, mouseY);
+        let OBBVector1 = createVector(OBB.x, OBB.y);
+        // giramos os vetores para deixarmos o AABB como uma OBB e o OBB como uma AABB
+        OBBVector1.rotate(-PI/4);
+        mouseAABBVector.rotate(-PI/4);
+        // testa se pelo menos um dos 4 vértices da AABB está dentro da OBB
+        axis = {
+          x: mouseAABBVector.x + (mouseAABB.h/2)*Math.cos(PI/4) - (mouseAABB.w/2)*Math.cos(PI/4),
+          y: mouseAABBVector.y - (mouseAABB.h/2)*Math.cos(PI/4) - (mouseAABB.w/2)*Math.cos(PI/4)
+        }
+        if((axis.x > OBBVector1.x - OBB.w/2) && (axis.x < OBBVector1.x + OBB.w/2) && (axis.y > OBBVector1.y - OBB.h/2) && (axis.y < OBBVector1.y + OBB.h/2))
+          isCollide = true;
+        axis = {
+          x: mouseAABBVector.x - (mouseAABB.h/2)*Math.cos(PI/4) - (mouseAABB.w/2)*Math.cos(PI/4),
+          y: mouseAABBVector.y + (mouseAABB.h/2)*Math.cos(PI/4) - (mouseAABB.w/2)*Math.cos(PI/4)
+        }
+        if((axis.x > OBBVector1.x - OBB.w/2) && (axis.x < OBBVector1.x + OBB.w/2) && (axis.y > OBBVector1.y - OBB.h/2) && (axis.y < OBBVector1.y + OBB.h/2))
+          isCollide = true;   
+        axis = {
+          x: mouseAABBVector.x - (mouseAABB.h/2)*Math.cos(PI/4) + (mouseAABB.w/2)*Math.cos(PI/4),
+          y: mouseAABBVector.y + (mouseAABB.h/2)*Math.cos(PI/4) + (mouseAABB.w/2)*Math.cos(PI/4)
+        }
+        if((axis.x > OBBVector1.x - OBB.w/2) && (axis.x < OBBVector1.x + OBB.w/2) && (axis.y > OBBVector1.y - OBB.h/2) && (axis.y < OBBVector1.y + OBB.h/2))
+          isCollide = true;   
+        axis = {
+          x: mouseAABBVector.x + (mouseAABB.h/2)*Math.cos(PI/4) + (mouseAABB.w/2)*Math.cos(PI/4),
+          y: mouseAABBVector.y - (mouseAABB.h/2)*Math.cos(PI/4) + (mouseAABB.w/2)*Math.cos(PI/4)
+        }
+        if((axis.x > OBBVector1.x - OBB.w/2) && (axis.x < OBBVector1.x + OBB.w/2) && (axis.y > OBBVector1.y - OBB.h/2) && (axis.y < OBBVector1.y + OBB.h/2))
+          isCollide = true;    
+        if(isCollide){
+          fill(100,200,100);
+        } else {
+          fill(255);
+        } 
         break;
       case 'Sphere':
         // passa o valor das coordenadas do mouse para um vetor
         let mouseSphereVector = createVector(mouseX, mouseY);
         // rotaciona o centro do OBB e do vetor do mouse para alinhar a OBB nos eixos X e Y
-        OBBVector.rotate(-PI/4);
+        let OBBVector2 = createVector(OBB.x, OBB.y);
+        OBBVector2.rotate(-PI/4);
         mouseSphereVector.rotate(-PI/4);
-        let isCollide = false;
+        let isCollide2 = false;
         // com esses vetores rotacionados, podemos tratar essa colisão como uma (AABB - Sphere)
-        if ((mouseSphereVector.x < OBBVector.x - OBB.w/2) && (mouseSphereVector.y < OBBVector.y - OBB.h/2)){ // (posição 1)
-          if((mouseSphere.r*mouseSphere.r)/4 > dist_2(mouseSphereVector.x, mouseSphereVector.y, OBBVector.x - OBB.w/2, OBBVector.y - OBB.h/2))
+        if ((mouseSphereVector.x < OBBVector2.x - OBB.w/2) && (mouseSphereVector.y < OBBVector2.y - OBB.h/2)){ // (posição 1)
+          if((mouseSphere.r*mouseSphere.r)/4 > dist_2(mouseSphereVector.x, mouseSphereVector.y, OBBVector2.x - OBB.w/2, OBBVector2.y - OBB.h/2))
             // checa a distãncia do raio do círculo com o corner superior esquerdo
-            isCollide = true;
-        } else if ((mouseSphereVector.x > OBBVector.x + OBB.w/2) && (mouseSphereVector.y < OBBVector.y - OBB.h/2)){ // (posição 3)
-          if((mouseSphere.r*mouseSphere.r)/4 > dist_2(mouseSphereVector.x, mouseSphereVector.y, OBBVector.x + OBB.w/2, OBBVector.y - OBB.h/2))
+            isCollide2 = true;
+        } else if ((mouseSphereVector.x > OBBVector2.x + OBB.w/2) && (mouseSphereVector.y < OBBVector2.y - OBB.h/2)){ // (posição 3)
+          if((mouseSphere.r*mouseSphere.r)/4 > dist_2(mouseSphereVector.x, mouseSphereVector.y, OBBVector2.x + OBB.w/2, OBBVector2.y - OBB.h/2))
             // checa a distãncia do raio do círculo com o corner superior direito
-            isCollide = true;
-        } else if ((mouseSphereVector.x < OBBVector.x - OBB.w/2) && (mouseSphereVector.y > OBBVector.y + OBB.h/2)){ // (posição 7)
-          if((mouseSphere.r*mouseSphere.r)/4 > dist_2(mouseSphereVector.x, mouseSphereVector.y, OBBVector.x - OBB.w/2, OBBVector.y + OBB.h/2))
+            isCollide2 = true;
+        } else if ((mouseSphereVector.x < OBBVector2.x - OBB.w/2) && (mouseSphereVector.y > OBBVector2.y + OBB.h/2)){ // (posição 7)
+          if((mouseSphere.r*mouseSphere.r)/4 > dist_2(mouseSphereVector.x, mouseSphereVector.y, OBBVector2.x - OBB.w/2, OBBVector2.y + OBB.h/2))
             // checa a distãncia do raio do círculo com o corner inferior esquerdo
-            isCollide = true;
-        } else if ((mouseSphereVector.x > OBBVector.x + OBB.w/2) && (mouseSphereVector.y > OBBVector.y + OBB.h/2)){ // (posição 9)
-          if((mouseSphere.r*mouseSphere.r)/4 > dist_2(mouseSphereVector.x, mouseSphereVector.y, OBBVector.x + OBB.w/2, OBBVector.y + OBB.h/2))
+            isCollide2 = true;
+        } else if ((mouseSphereVector.x > OBBVector2.x + OBB.w/2) && (mouseSphereVector.y > OBBVector2.y + OBB.h/2)){ // (posição 9)
+          if((mouseSphere.r*mouseSphere.r)/4 > dist_2(mouseSphereVector.x, mouseSphereVector.y, OBBVector2.x + OBB.w/2, OBBVector2.y + OBB.h/2))
             // checa a distãncia do raio do círculo com o corner inferior direito
-            isCollide = true;
-        } else if (((OBBVector.x - OBB.w/2) < (mouseSphereVector.x + mouseSphere.r/2)) &&
-          ((OBBVector.x + OBB.w/2) > (mouseSphereVector.x - mouseSphere.r/2)) &&
-          ((OBBVector.y - OBB.h/2) < (mouseSphereVector.y + mouseSphere.r/2)) &&
-          ((OBBVector.y + OBB.h/2) > (mouseSphereVector.y - mouseSphere.r/2))){
+            isCollide2 = true;
+        } else if (((OBBVector2.x - OBB.w/2) < (mouseSphereVector.x + mouseSphere.r/2)) &&
+          ((OBBVector2.x + OBB.w/2) > (mouseSphereVector.x - mouseSphere.r/2)) &&
+          ((OBBVector2.y - OBB.h/2) < (mouseSphereVector.y + mouseSphere.r/2)) &&
+          ((OBBVector2.y + OBB.h/2) > (mouseSphereVector.y - mouseSphere.r/2))){
             // caso esteja nas posições 2, 4, 5, 6 ou 8, o teste AABB com AABB funciona perfeitamente
-            isCollide = true;
+            isCollide2 = true;
         }
         if(isCollide){
           fill(100,200,100);
@@ -401,14 +464,14 @@ function drawOBB() {
         break;
       case 'OBB':
         // passa o valor das coordenadas do mouse para um vetor, e o centro da OBB para outro vetor
-        let OBBVector2 = createVector(OBB.x, OBB.y);
+        let OBBVector3 = createVector(OBB.x, OBB.y);
         let mouseOBBVector = createVector(mouseX, mouseY);
-        OBBVector2.rotate(-PI/4);
+        OBBVector3.rotate(-PI/4);
         mouseOBBVector.rotate(-PI/4);
-        if(((OBBVector2.x - OBB.w/2) < (mouseOBBVector.x + mouseOBB.w/2)) &&
-           ((OBBVector2.x + OBB.w/2) > (mouseOBBVector.x - mouseOBB.w/2)) &&
-           ((OBBVector2.y - OBB.h/2) < (mouseOBBVector.y + mouseOBB.h/2)) &&
-           ((OBBVector2.y + OBB.h/2) > (mouseOBBVector.y - mouseOBB.h/2))){
+        if(((OBBVector3.x - OBB.w/2) < (mouseOBBVector.x + mouseOBB.w/2)) &&
+           ((OBBVector3.x + OBB.w/2) > (mouseOBBVector.x - mouseOBB.w/2)) &&
+           ((OBBVector3.y - OBB.h/2) < (mouseOBBVector.y + mouseOBB.h/2)) &&
+           ((OBBVector3.y + OBB.h/2) > (mouseOBBVector.y - mouseOBB.h/2))){
           fill(100,200,100);
           } else {
             fill(255);
@@ -467,9 +530,10 @@ function drawHud(){
   stroke(0);
   fill(0);
   strokeWeight(1);
-  text("Modo de mouse: " + mouseMode, 20, 20);
-  text("Modo do grupo de pontos: " + pointsMode, 20, 40);
-  text("Aperte 'M' para mudar o modo do mouse e 'G' para mudar o modo do conjunto", 20, 700);
+  textSize(14);
+  text("Modo de mouse: " + mouseMode, 10, 20);
+  text("Modo do grupo de pontos: " + pointsMode, 10, 40);
+  text("Aperte 'M' para mudar o modo do mouse, 'G' para mudar o modo do conjunto e 'R' para apagar todos os pontos.", 10, 700);
 }
 
 function keyReleased(){
@@ -499,6 +563,8 @@ function keyReleased(){
         mouseMode = "AABB";
         break;
     }
+  } else if (keyCode == 82){
+    pontos = [];
   }
 };
 
