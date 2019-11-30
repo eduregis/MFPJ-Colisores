@@ -207,26 +207,26 @@ function drawAABB(){
         mouseOBBVector.rotate(-PI/4);
         // testa se pelo menos um dos 4 vértices da AABB está dentro da OBB
         axis = {
-          x: AABBVector.x - (AABB.h/2)*Math.cos(PI/4) - (AABB.w/2)*Math.cos(PI/4),
-          y: AABBVector.y + (AABB.h/2)*Math.cos(PI/4) - (AABB.w/2)*Math.cos(PI/4)
+          x: AABBVector.x - (AABB.w/2)*Math.cos(PI/4) - (AABB.h/2)*Math.cos(PI/4),
+          y: AABBVector.y + (AABB.w/2)*Math.cos(PI/4) - (AABB.h/2)*Math.cos(PI/4)
         }
         if((axis.x > mouseOBBVector.x - mouseOBB.w/2) && (axis.x < mouseOBBVector.x + mouseOBB.w/2) && (axis.y > mouseOBBVector.y - mouseOBB.h/2) && (axis.y < mouseOBBVector.y + mouseOBB.h/2))
         isCollide2 = true;
         axis = {
-          x: AABBVector.x + (AABB.h/2)*Math.cos(PI/4) - (AABB.w/2)*Math.cos(PI/4),
-          y: AABBVector.y - (AABB.h/2)*Math.cos(PI/4) - (AABB.w/2)*Math.cos(PI/4)
+          x: AABBVector.x + (AABB.w/2)*Math.cos(PI/4) - (AABB.h/2)*Math.cos(PI/4),
+          y: AABBVector.y - (AABB.w/2)*Math.cos(PI/4) - (AABB.h/2)*Math.cos(PI/4)
         }
         if((axis.x > mouseOBBVector.x - mouseOBB.w/2) && (axis.x < mouseOBBVector.x + mouseOBB.w/2) && (axis.y > mouseOBBVector.y - mouseOBB.h/2) && (axis.y < mouseOBBVector.y + mouseOBB.h/2))
           isCollide2 = true;
         axis = {
-          x: AABBVector.x - (AABB.h/2)*Math.cos(PI/4) + (AABB.w/2)*Math.cos(PI/4),
-          y: AABBVector.y + (AABB.h/2)*Math.cos(PI/4) + (AABB.w/2)*Math.cos(PI/4)
+          x: AABBVector.x - (AABB.w/2)*Math.cos(PI/4) + (AABB.h/2)*Math.cos(PI/4),
+          y: AABBVector.y + (AABB.w/2)*Math.cos(PI/4) + (AABB.h/2)*Math.cos(PI/4)
         }
         if((axis.x > mouseOBBVector.x - mouseOBB.w/2) && (axis.x < mouseOBBVector.x + mouseOBB.w/2) && (axis.y > mouseOBBVector.y - mouseOBB.h/2) && (axis.y < mouseOBBVector.y + mouseOBB.h/2))
           isCollide2 = true;
         axis = {
-          x: AABBVector.x + (AABB.h/2)*Math.cos(PI/4) + (AABB.w/2)*Math.cos(PI/4),
-          y: AABBVector.y - (AABB.h/2)*Math.cos(PI/4) + (AABB.w/2)*Math.cos(PI/4)
+          x: AABBVector.x + (AABB.w/2)*Math.cos(PI/4) + (AABB.h/2)*Math.cos(PI/4),
+          y: AABBVector.y - (AABB.w/2)*Math.cos(PI/4) + (AABB.h/2)*Math.cos(PI/4)
         }
         if((axis.x > mouseOBBVector.x - mouseOBB.w/2) && (axis.x < mouseOBBVector.x + mouseOBB.w/2) && (axis.y > mouseOBBVector.y - mouseOBB.h/2) && (axis.y < mouseOBBVector.y + mouseOBB.h/2))
           isCollide2 = true;
